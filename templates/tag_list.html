@@ -12,6 +12,11 @@
   </head>
   <body>
     <h1>Tag List</h1>
+    <ul>
+      {% for tag in tags %}
+      <li>{{ tag.name }}</li>
+      {% endfor %}
+  </ul>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

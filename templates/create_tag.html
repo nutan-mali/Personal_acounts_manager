@@ -10,9 +10,17 @@
 
     <title>Create Tag</title>
   </head>
-  <body>
-    <h1>Add New Tag</h1>
-
+  <body><div class="container">
+    <h3 class="alert alert-success my-5 text-center">Add New Tag</h3>
+    <form method="post">
+      {% csrf_token %}
+      {% comment %} {{ form.as_p }} {% endcomment %}
+      <label for="desc" class="form-label">Tag Name</label>
+            <input type="text" id="desc" name="description" class="form-control" aria-describedby="text">
+            <br>
+      <button type="submit" class ='btn btn-outline-success text-center'>Create</button>
+  </form>
+</div>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
