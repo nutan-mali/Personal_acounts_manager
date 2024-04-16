@@ -23,7 +23,11 @@ def create_expense(request):
   else:
         form = ExpenseForm()
   return render(request, 'add_expense.html', {'form': form})
-  
+
+def Delete_record(request,id):
+    a=Expense.objects.get(pk=id)
+    a.delete()
+    return redirect('expense_list')
 
 def expense_list(request):
     expenses = Expense.objects.all()

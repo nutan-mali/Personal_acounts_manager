@@ -39,7 +39,15 @@
                       {% if not forloop.last %}, {% endif %}
                   {% endfor %}
               </td>
-              <td>Action buttons here</td>
+              <td><!-- Delete Icon -->
+                <form action="{% url  'delete' expense.id %}" method="post" class="d-inline">
+                     {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-dark text-center">Delete
+                       
+                    </button>
+                    
+                </form>
+              </td>
           </tr>
           {% endfor %}
           </tbody>
