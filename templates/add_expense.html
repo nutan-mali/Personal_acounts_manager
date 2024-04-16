@@ -11,8 +11,30 @@
     <title>Create Expense</title>
   </head>
   <body>
-    <h1>Add New Expense</h1>
-
+    <div class="container">
+      <form  method="post">
+        {% csrf_token %}
+    <h3 class="alert alert-success my-5 text-center">Add New Expense</h3>
+    <label for="text" class="form-label">Discription</label>
+    <input type="text" id="desc" class="form-control" aria-describedby="text">
+    <label for="text" class="form-label">Cost</label>
+    <input type="number" id="desc" class="form-control" aria-describedby="text">
+    <label for="number" class="form-label">Date</label>
+    <input type="text" id="cost" class="form-control" aria-describedby="number">
+    <br>
+    <select name="tags" class="form-select" aria-label="Default select example">
+      <option selected>Tag</option>
+      <option value="1">Food</option>
+      <option value="2">Grocery</option>
+      <option value="3">Travel</option>
+  </select>
+  
+      <br>
+      <div class="button-container" style="text-align: center;">
+      <button type="Submit" class="btn btn-outline-success text-center">Submit</button>
+    </div>
+    </div>
+  </form>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
