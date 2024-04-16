@@ -8,7 +8,7 @@ class Tag(models.Model):
 
 class Expense(models.Model):
     description = models.CharField(max_length=255)
-    cost = models.DecimalField(max_digits=10, decimal_places=2)
+    cost = models.IntegerField(blank=False)
     date = models.DateField()
     tags = models.ManyToManyField(Tag)
 
