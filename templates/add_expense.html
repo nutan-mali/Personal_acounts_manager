@@ -25,11 +25,11 @@
             <input type="date" id="date" name="date" class="form-control" aria-describedby="date">
             <br>
             <select name="tags" class="form-select" aria-label="Default select example">
-              <option value="">Select Tag</option>  {% for tag in form.tags.field.queryset %}
-                  <option value="{{ tag.pk }}">{{ tag.name }}</option>
+              <option value="" selected disabled>Select Tag</option>
+              {% for tag in form.tags.field.queryset %}
+                  <option value="{{ tag.id }}">{{ tag.name }}</option>
               {% endfor %}
           </select>
-          
             <br>
             <div class="button-container" style="text-align: center;">
                 <button type="submit" class="btn btn-outline-success text-center">Submit</button>

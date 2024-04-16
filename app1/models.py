@@ -10,7 +10,6 @@ class Expense(models.Model):
     description = models.CharField(max_length=255)
     cost = models.DecimalField(max_digits = 10, decimal_places = 2, null = True)
     date = models.DateField()
-    tags = models.ManyToManyField(Tag, related_name='expenses' , blank=True)
-
+    tags = models.ForeignKey(Tag,on_delete=models.CASCADE,  unique=True, related_name='Expense', null=True)
     def __str__(self):
         return self.description

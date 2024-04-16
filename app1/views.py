@@ -6,21 +6,23 @@ def index(request):
     return HttpResponse("works")
     
 def create_expense(request):
-    if request.method == 'POST':
-        form = ExpenseForm(request.POST)
-        if form.is_valid():
-            print("Form is valid. Cleaned data:")
-            print(form.cleaned_data)  # Print cleaned form data for debugging
-            form.save()
-            return redirect('expense_list')
-        else:
-            print("Form errors:")
-            print(form.errors)  # Print form errors for debugging
-            # Handle form errors
+  form = ExpenseForm()
+  if request.method == 'POST':
+    form = ExpenseForm(request.POST)
+    print(request.POST)
+    if form.is_valid(): # Check if form is valid
+      print(form.cleaned_data['tags'])  # Print the submitted value for tags 
+      form.save()  # Save the form data
+      print("save")
+      return redirect('expense_list')  
     else:
+      # Form is not valid, handle form errors
+      print("Form validation errors:")
+      for field, error in form.errors.items():
+        print(f"{field}: {error}")  # Print each error message
+  else:
         form = ExpenseForm()
-    return render(request, 'add_expense.html', {'form': form})
-
+  return render(request, 'add_expense.html', {'form': form})
   
 
 def expense_list(request):
