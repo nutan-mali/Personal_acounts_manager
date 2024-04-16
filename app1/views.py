@@ -8,3 +8,11 @@ def index(request):
 def expense_list(request):
     expenses = Expense.objects.all()
     return render(request, 'expense_list.html', {'expenses': expenses})
+def create_expense(request):
+    return render(request, 'add_expense.html')
+
+def tag_list(request):
+    return render(request, 'tag_list.html')
+
+def create_tag(request):
+     return render(request, 'create_tag.html')
