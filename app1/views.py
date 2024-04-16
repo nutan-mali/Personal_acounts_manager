@@ -6,22 +6,22 @@ def index(request):
     return HttpResponse("works")
     
 def create_expense(request):
-    form = ExpenseForm()  # Initialize the form instance
     if request.method == 'POST':
-        form = ExpenseForm(request.POST)  # Bind form with POST data
-        print("Works ")
-        if form.is_valid():  # Check if form is valid
-            form.save()  # Save the form data
-            # Optionally,  can add a success message here
-            print("test")
-            # Redirect to expense list after successful form submission
-            return redirect('expense_list')  # Assuming 'expense_list' is the URL name for your expense list view
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            print("Form is valid. Cleaned data:")
+            print(form.cleaned_data)  # Print cleaned form data for debugging
+            form.save()
+            return redirect('expense_list')
         else:
-            # Form is not valid, handle form errors
-            print("Form validation Error")  # Get form validation errors 
-            return render(request, 'add_expense.html', {'form': form})
-    # If request method is not POST (GET request), render the form
+            print("Form errors:")
+            print(form.errors)  # Print form errors for debugging
+            # Handle form errors
+    else:
+        form = ExpenseForm()
     return render(request, 'add_expense.html', {'form': form})
+
+  
 
 def expense_list(request):
     expenses = Expense.objects.all()
