@@ -51,8 +51,15 @@ def delete_record(request, id):
 
 # View to display the list of expenses
 def expense_list(request):
+    tags = Tag.objects.all()  # Get all tags (for filter dropdown)
     expenses = Expense.objects.all()
-    return render(request, 'expense_list.html', {'expenses': expenses})
+    # Check if a tag is selected in the filter
+    selected_tag_id = request.GET.get('tag', None)
+    if selected_tag_id:
+        expenses = expenses.filter(tags__id=selected_tag_id)  # Filter by tag ID
+
+    context = {'tags': tags, 'expenses': expenses}
+    return render(request, 'expense_list.html', context)
 
 # View to create a new tag
 def create_tag(request):
