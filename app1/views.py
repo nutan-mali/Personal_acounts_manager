@@ -8,28 +8,46 @@ def index(request):
 
 # View to handle expense creation
 def create_expense(request):
-  form = ExpenseForm()
-  if request.method == 'POST':
+  form = ExpenseForm() # Create instance of ExpenseForm Class
+  if request.method == 'POST': 
+    # Creats instance but this time its initialize withthe data submitedfrom the usersinput in request.POSt dict.
     form = ExpenseForm(request.POST)
     print(request.POST)
+
     if form.is_valid(): # Check if form is valid
-      print(form.cleaned_data['tags'])  # Print the submitted value for tags 
+    #   print(form.cleaned_data['tags'])  # Print the submitted value for tags 
       form.save()  # Save the form data
       print("save")
-      return redirect('expense_list')  
+      return redirect('expense_list') #redirects the user to another view function named expense_list 
+    
     else:
       # Form is not valid, handle form errors
       print("Form validation errors:")
       for field, error in form.errors.items():
         print(f"{field}: {error}")  # Print each error message
   else:
-        form = ExpenseForm()
-  return render(request, 'add_expense.html', {'form': form})
+        form = ExpenseForm() # if request is not POST then GET request to display the initial empty form.
+  return render(request, 'add_expense.html', {'form': form})  
 
-def delete_record(request,id):
-    a=Expense.objects.get(pk=id)
-    a.delete()
-    return redirect('expense_list')
+def delete_record(request, id):
+
+    try:
+        # Get the expense object to be deleted
+        expense = Expense.objects.get(pk=id)
+
+        # Delete the expense object
+        expense.delete()
+        print("Expense deleted successfully!")  # Print for debugging 
+
+        # Redirect to the expense list page after successful deletion
+        return redirect('expense_list')
+
+    except Expense.DoesNotExist:
+        # Handle case where expense with the given ID doesn't exist
+        print("Expense not found!")  # Print for debugging 
+        
+    return redirect('expense_list')  # Redirect even if exception occurs 
+
 
 # View to display the list of expenses
 def expense_list(request):
@@ -53,7 +71,25 @@ def tag_list(request):
     return render(request, 'tag_list.html', {'tags': tags})
 
 # View to display all expenses associated with a selected tag
-# def tag_expenses(request, tag_id):
-#     tag = Tag.objects.get(id=tag_id)
-#     expenses = Expense.objects.filter(tags=tag)
-#     return render(request, 'tag_expenses.html', {'tag': tag, 'expenses': expenses})
+
+ # This function handles a request for a tag report based on the provided tag ID.
+def tag_report(request, tag_id):
+ 
+    try:
+        selected_tag = Tag.objects.get(pk=tag_id)
+    except Tag.DoesNotExist:
+        # Handle  where the tag ID is invalid (tag doesn't exist)
+        
+        return render(request,  {'message': 'Invalid Tag ID'})
+
+    # 2. Fetch Related Expenses:
+    related_expenses = selected_tag.expenses.all()
+
+    # 3. Prepare Context for Template:
+    context = {
+        'tag': selected_tag,  # The selected tag object
+        'expenses': related_expenses,  # List of associated expense objects
+    }
+
+    # 4. Render the Template:
+    return render(request, 'tag_expense.html', context)
