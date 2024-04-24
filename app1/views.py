@@ -32,6 +32,7 @@ def create_expense(request):
  
  
 
+
 def update_expenses(request, sno):
     form = ExpenseForm()
     print("data")
@@ -43,6 +44,7 @@ def update_expenses(request, sno):
         # form = ""
         form = ExpenseForm(request.POST, instance=expense)#, instance=expense
         print("request.POST")
+        print(request.POST)
         
         if form.is_valid():
 
