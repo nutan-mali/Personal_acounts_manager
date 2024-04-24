@@ -1,4 +1,5 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
+
 from .models import Expense, Tag
 from .forms import ExpenseForm, TagForm
 
@@ -27,13 +28,39 @@ def create_expense(request):
         print(f"{field}: {error}")  # Print each error message
   else:
         form = ExpenseForm() # if request is not POST then GET request to display the initial empty form.
-  return render(request, 'add_expense.html', {'form': form})  
+  return render(request, 'add_expense.html', {'form': form}) 
+ 
+ 
 
-def delete_record(request, id):
+def update_expenses(request, sno):
+    form = ExpenseForm()
+    print("data")
+    expense = ""
+    expense = get_object_or_404(Expense, id=sno)
+    # expense = Expense.objects.get(expense,id=sno)
+    print(expense , expense.cost, expense.id)
+    if request.method == "POST":
+        # form = ""
+        form = ExpenseForm(request.POST, instance=expense)#, instance=expense
+        print("request.POST")
+        
+        if form.is_valid():
+
+            # Save the updated data to the database:
+            form.save()
+            print("formData")
+            # Redirect to a new URL:
+            return redirect('expense_list')
+    else:
+        # Initialize the form with existing expense data:
+        form = ExpenseForm(instance=expense)
+    return render(request, 'update.html', {'form': form}) #return HttpResponse("update works")
+
+def delete_record(request, sno):
 
     try:
         # Get the expense object to be deleted
-        expense = Expense.objects.get(pk=id)
+        expense = Expense.objects.get(id=sno)
 
         # Delete the expense object
         expense.delete()

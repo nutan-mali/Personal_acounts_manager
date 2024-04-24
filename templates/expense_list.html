@@ -53,15 +53,20 @@
                       {% if not forloop.last %}, {% endif %}
                   {% endfor %}
               </td>
-              <td><!-- Delete Icon -->
-                <form action="{% url  'delete' expense.id %}" method="post" class="d-inline">
-                     {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-dark text-center">Delete
-                       
-                    </button>
-                    
+              <td>
+                <!-- Delete Icon -->
+                <form action="{% url 'delete' expense.id %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-dark text-center">Delete</button>
                 </form>
-              </td>
+            
+                <!-- Update Form -->
+                <form method="POST" action="{% url 'update_expense' expense.id %}" enctype="multipart/form-data" class="d-inline">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-outline-dark text-center">Update</button>
+                </form>
+            </td>
           </tr>
           {% endfor %}
           </tbody>
