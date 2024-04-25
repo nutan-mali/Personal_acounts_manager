@@ -56,8 +56,8 @@ def update_expenses(request, sno):
     else:
         # Initialize the form with existing expense data:
         form = ExpenseForm(instance=expense)
-        context = {'form': form}
-    return render(request, 'update.html',context ) #return HttpResponse("update works")
+         
+    return render(request, 'update.html',{'form': form} ) #return HttpResponse("update works")
 
 def delete_record(request, sno):
 
