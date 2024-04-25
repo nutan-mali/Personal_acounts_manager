@@ -1,17 +1,16 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-
 from .models import Expense, Tag
 from .forms import ExpenseForm, TagForm
 
 # Index view to check if the app is working
 def index(request):
-    return HttpResponse("The app is working!   Check Urls for Review")
+    return HttpResponse("The app is working!   Check Urls for Review  ")
 
 # View to handle expense creation
 def create_expense(request):
   form = ExpenseForm() # Create instance of ExpenseForm Class
   if request.method == 'POST': 
-    # Creats instance but this time its initialize withthe data submitedfrom the usersinput in request.POSt dict.
+    # Creats instance but this time its initialize with the data submited from the users input in request.POSt dict.
     form = ExpenseForm(request.POST)
     print(request.POST)
 
@@ -19,7 +18,7 @@ def create_expense(request):
     #   print(form.cleaned_data['tags'])  # Print the submitted value for tags 
       form.save()  # Save the form data
       print("save")
-      return redirect('expense_list') #redirects the user to another view function named expense_list 
+      return redirect('expense_list') # redirects the user to another view function named expense_list 
     
     else:
       # Form is not valid, handle form errors
@@ -28,7 +27,8 @@ def create_expense(request):
         print(f"{field}: {error}")  # Print each error message
   else:
         form = ExpenseForm() # if request is not POST then GET request to display the initial empty form.
-  return render(request, 'add_expense.html', {'form': form}) 
+        context = {'form': form}
+  return render(request, 'add_expense.html', context)#{'form': form}) 
  
  
 
@@ -56,7 +56,8 @@ def update_expenses(request, sno):
     else:
         # Initialize the form with existing expense data:
         form = ExpenseForm(instance=expense)
-    return render(request, 'update.html', {'form': form}) #return HttpResponse("update works")
+        context = {'form': form}
+    return render(request, 'update.html',context ) #return HttpResponse("update works")
 
 def delete_record(request, sno):
 
@@ -66,7 +67,7 @@ def delete_record(request, sno):
 
         # Delete the expense object
         expense.delete()
-        print("Expense deleted successfully!")  # Print for debugging 
+        print(expense,"Expense deleted  successfully!")  # Print for debugging 
 
         # Redirect to the expense list page after successful deletion
         return redirect('expense_list')
@@ -114,6 +115,7 @@ def tag_report(request, tag_id):
     try:
         selected_tag = Tag.objects.get(pk=tag_id)
     except Tag.DoesNotExist:
+        print("Tag Doesnt exist")
         # Handle  where the tag ID is invalid (tag doesn't exist)
         
         return render(request,  {'message': 'Invalid Tag ID'})
