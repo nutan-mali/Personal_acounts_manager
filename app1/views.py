@@ -2,21 +2,17 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from .models import Expense, Tag
 from .forms import ExpenseForm, TagForm
 
-# Index view to check if the app is working
-def index(request):
-    return HttpResponse("The app is working!   Check Urls for Review  ")
-
 # View to handle expense creation
 def create_expense(request):
   form = ExpenseForm() # Create instance of ExpenseForm Class
   if request.method == 'POST': 
     # Creats instance but this time its initialize with the data submited from the users input in request.POSt dict.
-    form = ExpenseForm(request.POST)
+    form_data = ExpenseForm(request.POST)
     print(request.POST)
 
-    if form.is_valid(): # Check if form is valid
+    if form_data.is_valid(): # Check if form is valid
     #   print(form.cleaned_data['tags'])  # Print the submitted value for tags 
-      form.save()  # Save the form data
+      form_data.save()  # Save the form data
       print("save")
       return redirect('expense_list') # redirects the user to another view function named expense_list 
     
@@ -28,7 +24,7 @@ def create_expense(request):
   else:
         form = ExpenseForm() # if request is not POST then GET request to display the initial empty form.
         context = {'form': form}
-  return render(request, 'add_expense.html', context)#{'form': form}) 
+  return render(request, 'add_expense.html',context)#{'form': form}) 
  
  
 
@@ -37,27 +33,42 @@ def update_expenses(request, sno):
     form = ExpenseForm()
     print("data")
     expense = ""
-    expense = get_object_or_404(Expense, id=sno)
+    expense = Expense.objects.get(id=sno)
     # expense = Expense.objects.get(expense,id=sno)
-    print(expense , expense.cost, expense.id)
+    print("expense deatils:- ******", expense , expense.cost, expense.id)
+    print(request.method)
     if request.method == "POST":
         # form = ""
+        print("put request testing",expense,expense.cost,expense.date,expense.tags)
+
         form = ExpenseForm(request.POST, instance=expense)#, instance=expense
-        print("request.POST")
-        print(request.POST)
+        print("request.post")
+        print("this is the method",request.method)
         
         if form.is_valid():
+            print("form is valid")
 
             # Save the updated data to the database:
             form.save()
             print("formData")
             # Redirect to a new URL:
             return redirect('expense_list')
+        else:
+                print(form.error)
+        
+        
     else:
         # Initialize the form with existing expense data:
+
         form = ExpenseForm(instance=expense)
-         
-    return render(request, 'update.html',{'form': form} ) #return HttpResponse("update works")
+        print("update testing",expense,expense.cost,expense.date,expense.tags)
+
+    context={
+        'form':form,
+        'expense': expense
+    }
+        
+    return render(request, 'update.html' ,  context=context) #return HttpResponse("update works")
 
 def delete_record(request, sno):
 
@@ -91,12 +102,13 @@ def expense_list(request):
     context = {'tags': tags, 'expenses': expenses}
     return render(request, 'expense_list.html', context)
 
-# View to create a new tag
+# View to create a new tag  
 def create_tag(request):
     if request.method == 'POST':
-        form = TagForm(request.POST)
+        form = TagForm(request.POST)   
         if form.is_valid():
             form.save()
+            
             return redirect('tag_list')  # Redirect to tag list page after successful creation
     else:
         form = TagForm()

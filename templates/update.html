@@ -12,25 +12,16 @@
 </head>
 <body>
     <div class="container">
-        <form method="POST" >
-            {% csrf_token %}
-
-            <h3 class="alert alert-success my-5 text-center">Update Expense</h3>
-                     
-            <label for="desc" class="form-label">Description</label>
-            <input type="text" id="desc" name="description" class="form-control" aria-describedby="text" value="{{ expense.description }}">
-            
-            <label for="cost" class="form-label">Cost</label>
-            <input type="number" id="cost" name="cost" class="form-control" aria-describedby="cost" value="{{ expense.cost }}">
-            
-            <label for="date" class="form-label">Date</label>
-            <input type="date" id="date" name="date" class="form-control" aria-describedby="date" value="{{ expense.date }}">
-            
-            <br><br>
-            <div class="button-container" style="text-align: center;">
-                <button type="submit" class="btn btn-outline-success text-center">Update</button>
-            </div>
-        </form>
+       
+<form method="post" action="/update/{{expense.id}}/">
+    <div class="container">
+        <br><br><br>
+        <h3 class="alert alert-warning text-center">Update Expense</h3>
+        
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Update" class="btn btn-success">
+</form>
     </div>
 
     <!-- Bootstrap Bundle with Popper -->

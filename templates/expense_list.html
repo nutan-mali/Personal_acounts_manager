@@ -48,10 +48,16 @@
               <td>{{ expense.cost }}</td>
               <td>{{ expense.date }}</td>
               <td>
+                {% if expense.tags.all %}
                   {% for tag in expense.tags.all %}
                       {{ tag.name }}
-                      {% if not forloop.last %}, {% endif %}
+                      {% if not forloop.last %},
+                       {% endif %}
+                       
                   {% endfor %}
+                  {% else %}
+                No Tags Found
+                {% endif %}
               </td>
               <td>
                 <!-- Delete Icon -->
@@ -61,18 +67,23 @@
                 </form>
             
                 <!-- Update Form -->
-                <form method="POST" action="{% url 'update_expense' expense.id %}" enctype="multipart/form-data" class="d-inline">
+                {% comment %} <form method="POST" action="{% url 'update_expense' expense.id %}" enctype="multipart/form-data" class="d-inline">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-outline-dark text-center">Update</button>
-                </form>
+                </form> {% endcomment %}
+                <div class="d-inline">
+
+                  <a href="/update/{{ expense.id }}/" class="btn btn-outline-dark text-center">Update</a>
+                </div>
+
             </td>
           </tr>
           {% endfor %}
           </tbody>
       </table>
       <a href="{% url 'create_expense' %}" class="btn btn-success">Add Expense</a>
-      <a href="{% url 'create_tag' %}" class="btn btn-success">Add Tag</a>
+      <a href="{% url 'create_tag' %}" class="btn btn-success">Create Tag</a>
 
   </div>
 
